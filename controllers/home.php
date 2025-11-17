@@ -1,0 +1,3 @@
+<?php
+
+loadView(name: 'home');
