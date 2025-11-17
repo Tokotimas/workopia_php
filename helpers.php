@@ -41,7 +41,7 @@ function loadPartial($name): void
     if (file_exists(filename: $partialPath)) {
         require $partialPath;
     } else {
-        echo "View '{$name}' not found!";
+        echo "Partial '{$name}' not found!";
     }
 }
 
@@ -49,7 +49,7 @@ function loadPartial($name): void
  * Inspect a value(s)
  *
  * @param mixed $value
- * return void
+ * @return void
  */
 function inspect($value): void
 {
@@ -62,10 +62,12 @@ function inspect($value): void
  * Inspect a value(s) and die
  *
  * @param mixed $value
- * return void
+ * @return void
  */
 function inspectAndDie($value): void
 {
     echo '<pre>';
-    die(var_dump(value: $value));
+    var_dump(value: $value);
+    echo '</pre>';
+    die();
 }
