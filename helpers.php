@@ -17,11 +17,12 @@ function basePath($path = ''): string
  * @param string $name
  * @return void
  */
-function loadView($name): void
+function loadView($name, $data = []): void
 {
     $viewPath = basePath(path: "views/{$name}.view.php");
 
     if (file_exists(filename: $viewPath)) {
+        extract(array:$data); // converts the key of the assoc array into a variable 
         require $viewPath;
     } else {
         echo "View '{$name}' not found!";
@@ -70,4 +71,14 @@ function inspectAndDie($value): void
     var_dump(value: $value);
     echo '</pre>';
     die();
+}
+
+/**
+ * Format salary
+ * 
+ * @param string $salary
+ * @return string Formatted Salary
+ */
+function formatSalary($salary): string {
+    return '$' . number_format(num: floatval(value: $salary),thousands_separator:',');
 }
