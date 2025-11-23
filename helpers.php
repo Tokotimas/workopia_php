@@ -19,7 +19,7 @@ function basePath($path = ''): string
  */
 function loadView($name, $data = []): void
 {
-    $viewPath = basePath(path: "views/{$name}.view.php");
+    $viewPath = basePath(path: "App/views/{$name}.view.php");
 
     if (file_exists(filename: $viewPath)) {
         extract(array:$data); // converts the key of the assoc array into a variable 
@@ -37,7 +37,7 @@ function loadView($name, $data = []): void
  */
 function loadPartial($name): void
 {
-    $partialPath = basePath(path: "views/partials/{$name}.php");
+    $partialPath = basePath(path: "App/views/partials/{$name}.php");
 
     if (file_exists(filename: $partialPath)) {
         require $partialPath;

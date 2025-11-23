@@ -1,0 +1,16 @@
+{
+  "name": "tokotimas/workopia-php",
+  "description": "Job listing application",
+  "authors": [
+    {
+      "name": "Tokotimas",
+      "email": "tomas.katinas1996@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Framework\\": "Framework/",
+      "App\\": "App/"
+    }
+  }
+}

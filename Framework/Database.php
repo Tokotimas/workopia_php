@@ -1,5 +1,9 @@
 <?php
 
+namespace Framework;
+
+use PDO, PDOException, PDOStatement;
+
 class Database
 {
     private $conn;
@@ -23,7 +27,7 @@ class Database
         try {
             $this->conn = new PDO(dsn: $dsn, username: $config['username'], password: $config['password'], options: $options);
         } catch (PDOException $e) {
-            throw new Exception(message: "Database connection failed: {$e->getMessage()}");
+            throw new PDOException(message: "Database connection failed: {$e->getMessage()}");
         }
     }
 
@@ -33,7 +37,7 @@ class Database
      * @param string $query
      * 
      * @return PDOStatement
-     * @throws PDOException
+     * @throws Exception
      */
 
     public function query($query, $params = []): bool|PDOStatement
@@ -49,7 +53,7 @@ class Database
             $stmt->execute();
             return $stmt;
         } catch (PDOException $e) {
-            throw new Exception(message: "Query failed to execute {$e->getMessage()}");
+            throw new PDOException(message: "Query failed to execute {$e->getMessage()}");
         }
     }
 }
