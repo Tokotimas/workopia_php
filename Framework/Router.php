@@ -91,6 +91,12 @@ class Router
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
+        //Check for _method input
+        if ($requestMethod === 'POST' && isset($_POST['_method'])) {
+            // Override the request method with the value of _method
+            $requestMethod = strtoupper(string: $_POST['_method']);
+        }
+
         foreach ($this->routes as $route) {
             // Split the current URI into segments
             $uriSegments = explode(separator: '/', string: trim(string: $uri, characters: '/'));
@@ -110,7 +116,6 @@ class Router
 
                 for ($i = 0; $i < count(value: $uriSegments); $i++) {
                     // If the uri's do not match and there is no param
-                    
                     if ($routeSegments[$i] !== $uriSegments[$i] && !preg_match(pattern: '/\{(.+?)\}/', subject: $routeSegments[$i])) {
                         $match = false;
                         break;
@@ -131,7 +136,6 @@ class Router
                     $controllerInstance->$controllerMethod($params);
                     return;
                 }
-
             }
         }
         ErrorController::notFound();

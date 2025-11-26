@@ -22,7 +22,7 @@ function loadView($name, $data = []): void
     $viewPath = basePath(path: "App/views/{$name}.view.php");
 
     if (file_exists(filename: $viewPath)) {
-        extract(array:$data); // converts the key of the assoc array into a variable 
+        extract(array: $data); // converts the key of the assoc array into a variable 
         require $viewPath;
     } else {
         echo "View '{$name}' not found!";
@@ -79,6 +79,28 @@ function inspectAndDie($value): void
  * @param string $salary
  * @return string Formatted Salary
  */
-function formatSalary($salary): string {
-    return '$' . number_format(num: floatval(value: $salary),thousands_separator:',');
+function formatSalary($salary): string
+{
+    return '$' . number_format(num: floatval(value: $salary), thousands_separator: ',');
+}
+
+/**
+ * Sanitize Data
+ * 
+ * @param string $dirty
+ * @return string
+ */
+function sanitize($dirty): string
+{
+    return filter_var(value: trim(string: $dirty), filter: FILTER_SANITIZE_SPECIAL_CHARS);
+}
+
+/**
+ * Redirect to a given URL
+ * 
+ * @param string $url
+ * @return void
+ */
+function redirect($url): void {
+    header(header: "Location: {$url}");
 }

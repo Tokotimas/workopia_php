@@ -18,7 +18,6 @@ class Database
     {
         $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
 
-
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
@@ -37,7 +36,7 @@ class Database
      * @param string $query
      * 
      * @return PDOStatement
-     * @throws Exception
+     * @throws PDOException
      */
 
     public function query($query, $params = []): bool|PDOStatement
