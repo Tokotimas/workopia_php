@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Framework\Database;
 use Framework\Validation;
+use Framework\Session;
 
 class UserController
 {
@@ -14,6 +15,7 @@ class UserController
         $config = require basePath(path: 'config/db.php');
         $this->db = new Database(config: $config);
     }
+
     /**
      * Show the login page
      * 
@@ -23,6 +25,7 @@ class UserController
     {
         loadView(name: 'users/login');
     }
+
     /**
      * Show the register page
      * 
@@ -32,6 +35,7 @@ class UserController
     {
         loadView(name: 'users/create');
     }
+
     /**
      * Store user in database
      * 
@@ -101,6 +105,95 @@ class UserController
 
         $this->db->query(query: 'INSERT INTO users (name, email, city, password) VALUES (:name, :email, :city, :password)', params: $params);
 
+        // Get the new user ID
+        $userId = $this->db->conn->lastInsertId();
+
+        // Set user session
+        Session::set(key: 'user', value: [
+            'id' => $userId,
+            'name' => $name,
+            'email' => $email,
+            'city' => $city
+        ]);
+
         redirect(url: '/');
+    }
+
+    /**
+     * Logout a user and kill session
+     * 
+     * @return void
+     */
+    public function logout(): void
+    {
+        Session::clearAll();
+
+        $params = session_get_cookie_params();
+        setcookie(name: 'PHPSESSID', value: '', expires_or_options: time() - 86400, path: $params['path'], domain: $params['domain']);
+
+        redirect(url: '/');
+    }
+    
+    /**
+     * Authenticate user with email and password
+     * 
+     * @return void
+     */
+    public function authenticate(): void
+    {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        $errors = [];
+
+        //Validation
+        if (!Validation::email(value: $email)) {
+            $errors['email'] = 'Please enter a valid email';
+        }
+
+        if (!Validation::string(value: $password, min: 6, max: 50)) {
+            $errors['password'] = 'Password must be at least 6 characters';
+        }
+
+        // Check for errors
+        if (!empty($errors)) {
+            loadView(name: 'users/login', data: [
+                'errors' => $errors
+            ]);
+            exit;
+        }
+
+        // Check for email
+        $params = [
+            'email' => $email
+        ];
+
+        $user = $this->db->query(query: 'SELECT * FROM users WHERE email = :email', params: $params)->fetch();
+
+        if (!$user) {
+            $errors['email'] = 'Incorrect credentials';
+            loadView(name: 'users/login', data: [
+                'errors' => $errors
+            ]);
+        }
+
+        // Check if password is correct
+        if (!password_verify(password: $password, hash: $user->password)) {
+            $errors['email'] = 'Incorrect credentials';
+            loadView(name: 'users/login', data: [
+                'errors' => $errors
+            ]);
+        }
+
+        // Set user session
+        Session::set(key: 'user', value: [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'city' => $user->city
+        ]);
+
+        redirect(url: '/');
+
     }
 }

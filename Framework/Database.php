@@ -6,7 +6,7 @@ use PDO, PDOException, PDOStatement;
 
 class Database
 {
-    private $conn;
+    public $conn;
 
     /**
      * Constructor for Database class

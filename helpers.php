@@ -93,6 +93,7 @@ function formatSalary($salary): string
  */
 function sanitize($dirty): string
 {
+    $dirty = (string) $dirty;
     return filter_var(value: trim(string: $dirty), filter: FILTER_SANITIZE_SPECIAL_CHARS);
 }
 
@@ -102,6 +103,7 @@ function sanitize($dirty): string
  * @param string $url
  * @return void
  */
-function redirect($url): void {
+function redirect($url): void
+{
     header(header: "Location: {$url}");
 }

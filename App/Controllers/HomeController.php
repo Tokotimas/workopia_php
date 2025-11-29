@@ -12,6 +12,7 @@ class HomeController
         $config = require basePath(path: 'config/db.php');
         $this->db = new Database(config: $config);
     }
+
     /**
      * Show the latest listings
      * 
@@ -19,7 +20,7 @@ class HomeController
      */
     public function index(): void
     {
-        $listings = $this->db->query(query: 'SELECT * FROM listings LIMIT 6')->fetchAll();
+        $listings = $this->db->query(query: 'SELECT * FROM listings ORDER BY created_at DESC LIMIT 6')->fetchAll();
         loadView(name: 'home', data: [
             'listings' => $listings
         ]);
